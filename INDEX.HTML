@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VL SPARK 🎀</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
+:root{
+--pink:#ff75b7;--light:#fff2f8;--white:#fff;
+--text:#56334a;--purple:#c9a4ff;--muted:#9c7890;
+}
+body{
+font-family:'Segoe UI',sans-serif;
+background:var(--light);color:var(--text);
+transition:.3s;
+}
+body.dark{
+--light:#241725;--white:#38243b;
+--text:#fff0f8;--muted:#d2aec5;
+}
+header{
+position:sticky;top:0;z-index:10;
+background:var(--white);
+padding:15px 5%;
+display:flex;justify-content:space-between;
+align-items:center;flex-wrap:wrap;
+box-shadow:0 4px 20px #e99ac322;
+}
+.logo{font-size:25px;font-weight:900;color:var(--pink)}
+nav{display:flex;gap:12px;flex-wrap:wrap}
+nav a{
+text-decoration:none;color:var(--text);
+font-size:13px;font-weight:bold;
+padding:9px 12px;border-radius:20px;
+transition:.3s;
+}
+nav a:hover,nav a.active{
+background:var(--pink);color:white;
+}
+button{cursor:pointer;font-family:inherit}
+.theme{
+border:0;background:var(--pink);
+color:white;border-radius:50%;
+padding:11px;font-size:17px;
+}
+section{padding:75px 7%;scroll-margin-top:85px}
+.hero{
+min-height:85vh;display:flex;
+align-items:center;justify-content:center;
+text-align:center;
+background:linear-gradient(135deg,#ffe0ef,#f4e5ff,#fff1f8);
+}
+body.dark .hero{background:linear-gradient(135deg,#42243d,#302440)}
+.hero h1{
+font-size:clamp(45px,8vw,85px);
+color:#ed62a8;
+}
+.hero h2{font-size:27px;margin:15px}
+.hero p{max-width:600px;margin:auto;line-height:1.8;color:var(--muted)}
+.typing{color:#df5c9e;font-weight:bold;margin:15px}
+.btn{
+display:inline-block;background:var(--pink);
+color:white;padding:13px 24px;
+border-radius:30px;text-decoration:none;
+margin:12px 5px;border:0;
+transition:.3s;font-weight:bold;
+}
+.btn:hover{transform:translateY(-5px);box-shadow:0 8px 20px #ec75ad55}
+.title{
+text-align:center;color:var(--pink);
+font-size:36px;margin-bottom:35px;
+}
+.card{
+background:var(--white);padding:25px;
+border-radius:23px;
+box-shadow:0 8px 25px #e99ac322;
+transition:.3s;
+}
+.card:hover{transform:translateY(-6px)}
+.about{text-align:center;max-width:850px;margin:auto;line-height:1.9}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+gap:20px;
+}
+.skill{text-align:center}
+.skill .emoji{font-size:38px}
+.skill h3{margin:10px}
+.progress{
+height:9px;background:#f5d6e7;
+border-radius:20px;margin-top:15px;overflow:hidden;
+}
+.progress span{
+display:block;height:100%;
+background:linear-gradient(90deg,#ff75b7,#c9a4ff);
+border-radius:20px;
+}
+.project{text-align:center}
+.project .emoji{font-size:48px}
+.project p{color:var(--muted);margin:10px 0}
+.filters{text-align:center;margin-bottom:25px}
+.filters button{
+border:1px solid var(--pink);
+background:var(--white);color:var(--pink);
+padding:9px 17px;border-radius:25px;margin:5px;
+}
+.filters button.active{background:var(--pink);color:white}
+.gallery-item{
+min-height:175px;border-radius:22px;
+display:grid;place-items:center;
+font-size:65px;
+background:linear-gradient(135deg,#ffd8e9,#e9dcff);
+transition:.3s;
+}
+.gallery-item:hover{transform:scale(1.04) rotate(2deg)}
+.service{text-align:center}
+.service .emoji{font-size:40px}
+.contact{
+max-width:650px;margin:auto;text-align:center;
+}
+input,textarea{
+width:100%;padding:14px;margin:9px 0;
+border:1px solid #f2c6dd;border-radius:13px;
+background:var(--light);color:var(--text);
+font:inherit;
+}
+textarea{height:120px}
+footer{
+background:#ed79b2;color:white;
+text-align:center;padding:28px;
+}
+
+/* CHATBOX */
+.chat-button{
+position:fixed;bottom:22px;right:22px;
+width:62px;height:62px;border:0;
+border-radius:50%;background:var(--pink);
+color:white;font-size:28px;
+box-shadow:0 5px 20px #e66ba966;
+z-index:30;
+}
+.chat-window{
+display:none;position:fixed;
+bottom:95px;right:22px;
+width:min(340px,calc(100vw - 30px));
+height:440px;background:var(--white);
+border-radius:20px;
+box-shadow:0 10px 40px #0002;
+z-index:30;overflow:hidden;
+flex-direction:column;
+}
+.chat-window.open{display:flex}
+.chat-header{
+background:var(--pink);color:white;
+padding:16px;font-weight:bold;
+display:flex;justify-content:space-between;
+}
+.chat-header button{background:none;border:0;color:white;font-size:20px}
+.chat-messages{
+flex:1;overflow-y:auto;padding:13px;
+display:flex;flex-direction:column;gap:10px;
+}
+.message{
+padding:10px 13px;border-radius:15px;
+max-width:85%;font-size:14px;
+line-height:1.5;
+}
+.bot{background:#ffe0ef;align-self:flex-start;color:#56334a}
+.user{background:#d9c4ff;align-self:flex-end;color:#382344}
+.chat-input{
+display:flex;gap:6px;padding:10px;
+border-top:1px solid #f3d6e6;
+}
+.chat-input input{margin:0;min-width:0}
+.chat-input button{
+border:0;background:var(--pink);
+color:white;border-radius:12px;padding:10px 14px;
+}
+.chat-hints{padding:0 12px 9px;display:flex;gap:6px;flex-wrap:wrap}
+.chat-hints button{
+border:1px solid var(--pink);background:var(--white);
+color:var(--pink);border-radius:15px;padding:5px 9px;font-size:11px;
+}
+.hidden{display:none!important}
+@media(max-width:700px){
+header{justify-content:center;gap:12px}
+nav{justify-content:center}
+nav a{font-size:12px;padding:7px}
+section{padding:60px 5%}
+.title{font-size:29px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">VL SPARK 🎀</div>
+
+<nav id="navigation">
+<a href="#home">🏠 Home</a>
+<a href="#about">🌸 About</a>
+<a href="#skills">🎀 Skills</a>
+<a href="#projects">💻 Projects</a>
+<a href="#gallery">🖼️ Gallery</a>
+<a href="#services">✨ Services</a>
+<a href="#contact">💌 Contact</a>
+<a href="#chat" id="chatNav">💬 Chat</a>
+</nav>
+
+<button class="theme" id="theme">🌙</button>
+</header>
+
+<!-- 1 HOME -->
+<section class="hero" id="home">
+<div>
+<h2>WELCOME TO MY WORLD ✨</h2>
+<h1>VL SPARK</h1>
+<div class="typing" id="typing">Creative Dreamer 💗</div>
+<p>
+A little world filled with creativity, imagination,
+beautiful ideas and positive energy.
+Explore my personal website!
+</p>
+<a class="btn" href="#about">Explore More ♡</a>
+<a class="btn" href="#projects">See Projects ✨</a>
+</div>
+</section>
+
+<!-- 2 ABOUT -->
+<section id="about">
+<h2 class="title">🌸 ABOUT ME</h2>
+<div class="card about">
+<h2>Hello! Welcome to VL SPARK 💗</h2>
+<p>
+I'm a creative learner who loves technology,
+design, discovering new ideas and creating
+beautiful digital experiences.
+This website is my little creative universe!
+</p>
+<p>Dream big, stay curious and keep sparkling! ✨</p>
+</div>
+</section>
+
+<!-- 3 SKILLS -->
+<section id="skills">
+<h2 class="title">🎀 MY SKILLS</h2>
+<div class="grid">
+<div class="card skill">
+<div class="emoji">🌐</div>
+<h3>HTML</h3>
+<p>Website structure</p>
+<div class="progress"><span style="width:85%"></span></div>
+</div>
+<div class="card skill">
+<div class="emoji">🎨</div>
+<h3>CSS</h3>
+<p>Creative designs</p>
+<div class="progress"><span style="width:75%"></span></div>
+</div>
+<div class="card skill">
+<div class="emoji">⚡</div>
+<h3>JavaScript</h3>
+<p>Interactive features</p>
+<div class="progress"><span style="width:60%"></span></div>
+</div>
+<div class="card skill">
+<div class="emoji">💡</div>
+<h3>Creativity</h3>
+<p>New ideas</p>
+<div class="progress"><span style="width:95%"></span></div>
+</div>
+</div>
+</section>
+
+<!-- 4 PROJECTS -->
+<section id="projects">
+<h2 class="title">💻 MY PROJECTS</h2>
+<div class="filters">
+<button class="active" data-filter="all">All</button>
+<button data-filter="web">Web</button>
+<button data-filter="design">Design</button>
+<button data-filter="ideas">Ideas</button>
+</div>
+<div class="grid">
+<div class="card project" data-category="web">
+<div class="emoji">💻</div>
+<h3>My Website</h3>
+<p>A creative website made with code.</p>
+</div>
+<div class="card project" data-category="design">
+<div class="emoji">🎨</div>
+<h3>Pink Designs</h3>
+<p>Beautiful aesthetic design ideas.</p>
+</div>
+<div class="card project" data-category="ideas">
+<div class="emoji">🌟</div>
+<h3>Idea World</h3>
+<p>A collection of creative thoughts.</p>
+</div>
+</div>
+</section>
+
+<!-- 5 GALLERY -->
+<section id="gallery">
+<h2 class="title">🖼️ MY GALLERY</h2>
+<div class="grid">
+<div class="gallery-item">🌷</div>
+<div class="gallery-item">🎀</div>
+<div class="gallery-item">🦋</div>
+<div class="gallery-item">🌸</div>
+<div class="gallery-item">💗</div>
+<div class="gallery-item">✨</div>
+</div>
+</section>
+
+<!-- 6 SERVICES -->
+<section id="services">
+<h2 class="title">✨ WHAT I LOVE</h2>
+<div class="grid">
+<div class="card service">
+<div class="emoji">🎨</div>
+<h3>Creative Design</h3>
+<p>Exploring colours and layouts.</p>
+</div>
+<div class="card service">
+<div class="emoji">💻</div>
+<h3>Web Development</h3>
+<p>Building and learning websites.</p>
+</div>
+<div class="card service">
+<div class="emoji">💡</div>
+<h3>New Ideas</h3>
+<p>Thinking outside the box.</p>
+</div>
+</div>
+</section>
+
+<!-- 7 CONTACT -->
+<section id="contact">
+<h2 class="title">💌 CONTACT ME</h2>
+<div class="card contact">
+<h2>Let's Connect! 🌸</h2>
+<p>Send a message using your email application.</p>
+<form id="contactForm">
+<input id="contactName" placeholder="Your name" required>
+<input id="contactEmail" type="email" placeholder="Your email" required>
+<textarea id="contactMessage" placeholder="Your message..." required></textarea>
+<button class="btn" type="submit">Send Message 💗</button>
+</form>
+<p id="contactStatus"></p>
+</div>
+</section>
+
+<footer>
+<h2>VL SPARK ✨</h2>
+<p>Made with love, creativity and pink magic 💗</p>
+<p>© <span id="year"></span> VL SPARK</p>
+</footer>
+
+<!-- 8 CHATBOX -->
+<button class="chat-button" id="chatButton" aria-label="Open chat">💬</button>
+
+<div class="chat-window" id="chatWindow">
+<div class="chat-header">
+<span>VL SPARK Chat 💗</span>
+<button id="closeChat" aria-label="Close chat">×</button>
+</div>
+
+<div class="chat-messages" id="messages">
+<div class="message bot">
+Hi! Welcome to VL SPARK! 🎀
+I'm the demo website assistant.
+What would you like to know?
+</div>
+</div>
+
+<div class="chat-hints">
+<button data-question="What is VL SPARK?">About VL SPARK</button>
+<button data-question="What projects are here?">Projects</button>
+<button data-question="How can I contact you?">Contact</button>
+</div>
+
+<div class="chat-input">
+<input id="chatInput" placeholder="Type a message..." maxlength="300">
+<button id="sendChat">Send</button>
+</div>
+</div>
+
+<script>
+// Theme toggle
+document.getElementById("theme").onclick=()=>{
+document.body.classList.toggle("dark");
+document.getElementById("theme").textContent=
+document.body.classList.contains("dark")?"☀️":"🌙";
+};
+
+// Animated welcome text
+const phrases=["Creative Dreamer 💗","Future Creator ✨","Curious Learner 🌸","Always Sparkling 🎀"];
+let phrase=0;
+setInterval(()=>{
+phrase=(phrase+1)%phrases.length;
+document.getElementById("typing").textContent=phrases[phrase];
+},2200);
+
+// Working project filters
+document.querySelectorAll(".filters button").forEach(button=>{
+button.onclick=()=>{
+document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+button.classList.add("active");
+document.querySelectorAll(".project").forEach(project=>{
+project.classList.toggle("hidden",
+button.dataset.filter!=="all" &&
+project.dataset.category!==button.dataset.filter);
+});
+};
+});
+
+// Contact form opens user's email application.
+// Replace the address below with your own email.
+document.getElementById("contactForm").onsubmit=e=>{
+e.preventDefault();
+const name=document.getElementById("contactName").value;
+const email=document.getElementById("contactEmail").value;
+const message=document.getElementById("contactMessage").value;
+const subject=encodeURIComponent("Message from "+name);
+const body=encodeURIComponent("Name: "+name+"\nEmail: "+email+"\n\n"+message);
+document.getElementById("contactStatus").textContent="Opening your email app...";
+window.location.href="mailto:yourname@example.com?subject="+subject+"&body="+body;
+};
+
+// Chatbox open and close
+const chatWindow=document.getElementById("chatWindow");
+function openChat(){chatWindow.classList.add("open");}
+function closeChat(){chatWindow.classList.remove("open");}
+document.getElementById("chatButton").onclick=openChat;
+document.getElementById("chatNav").onclick=e=>{e.preventDefault();openChat();};
+document.getElementById("closeChat").onclick=closeChat;
+
+// Chat messages
+function addMessage(text,type){
+const message=document.createElement("div");
+message.className="message "+type;
+message.textContent=text;
+const area=document.getElementById("messages");
+area.appendChild(message);
+area.scrollTop=area.scrollHeight;
+}
+
+function getReply(text){
+const t=text.toLowerCase();
+
+if(t.includes("hello")||t.includes("hi")||t.includes("hey"))
+return "Hello! Welcome to VL SPARK! 💗 How can I help you?";
+if(t.includes("what is")||t.includes("about"))
+return "VL SPARK is a cute pink creative portfolio website! 🌸";
+if(t.includes("project"))
+return "Visit the Projects section to explore the sample projects. 💻";
+if(t.includes("skill"))
+return "The Skills section shows HTML, CSS, JavaScript and creativity. 🎀";
+if(t.includes("gallery"))
+return "The Gallery section has cute decorative designs and emojis! 🦋";
+if(t.includes("contact")||t.includes("email"))
+return "Go to the Contact section to prepare a message in your email app. 💌";
+if(t.includes("thank"))
+return "You're welcome! Keep sparkling! ✨";
+if(t.includes("bye"))
+return "Bye! Thanks for visiting VL SPARK! 💗";
+return "Thanks for your message! I'm a simple demo chatbot, so I can answer questions about this website. Try asking about projects, skills, gallery or contact. 🌷";
+}
+
+function sendMessage(){
+const input=document.getElementById("chatInput");
+const text=input.value.trim();
+if(!text)return;
+addMessage(text,"user");
+input.value="";
+setTimeout(()=>addMessage(getReply(text),"bot"),350);
+}
+
+document.getElementById("sendChat").onclick=sendMessage;
+document.getElementById("chatInput").addEventListener("keydown",e=>{
+if(e.key==="Enter")sendMessage();
+});
+
+// Suggested chat questions
+document.querySelectorAll(".chat-hints button").forEach(button=>{
+button.onclick=()=>{
+const text=button.dataset.question;
+addMessage(text,"user");
+setTimeout(()=>addMessage(getReply(text),"bot"),350);
+};
+});
+
+// Current year
+document.getElementById("year").textContent=new Date().getFullYear();
+</script>
+
+</body>
+</html>
